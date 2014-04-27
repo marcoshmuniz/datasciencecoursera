@@ -11,9 +11,15 @@ if(!file.exists("./data/ds.zip")){
   print("downloading dataset...")
   download.file(fileUrl1,destfile="./data/ds.zip",method="curl")
   print("extracting dataset...")
-  unzip("./data/ds.zip", list=TRUE)
+  unzip("./data/ds.zip", list=FALSE)
 }else{
   print("dataset already downloaded!")
+  if(file.exists("./UCI HAR Dataset")){
+    print("Dataset already extracted")
+  }else{
+    print("extracting dataset...")
+    unzip("./data/ds.zip", list=FALSE)
+  }
 }
 train_data_x <- read.table("UCI HAR Dataset/train/x_train.txt")
 test_data_x <- read.table("UCI HAR Dataset/test/x_test.txt")
@@ -52,6 +58,6 @@ library(reshape2)
 melted_data <- melt(subset_data, id.vars=c("result","subject"))
 tidy_data <- acast(melted_data, result+subject~variable,mean)
 print("tidy data created!")
-write.table(tidy_data, file="tidy_data.dat")
+write.table(tidy_data, file="tidy_data.txt")
 tidy_data
 }
